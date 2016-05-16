@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # $IMAGE and $TAG must be defined in jenkins
 
 FAMILY=hello-world
@@ -22,12 +24,13 @@ FAMILY=hello-world
 
 # Original Jenkins Job
 
+echo "Creating task-definition for tag: ${TAG}"
 docker run --rm anigeo/awscli      \
    ecs register-task-definition    \
    --family $FAMILY                \
    --region us-west-1              \
    --container-definitions "[{\"name\":\"hello-world\",\"image\":\"${IMAGE}:${TAG}\",\"cpu\":0,\"memory\":200,\"essential\":true,\"portMappings\": [{\"containerPort\": 8080,\"hostPort\": 80 }]}]" | grep "revision" | cut -d ':' -f 2 | cut -c2- > revision.txt
    
-   
+echo "Updating service with task-definition: $(cat revision.txt)"
 docker run --rm anigeo/awscli \
    ecs update-service --cluster app --service app --region us-west-1 --task-definition "hello-world:$(cat revision.txt)"
