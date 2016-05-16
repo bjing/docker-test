@@ -33,4 +33,4 @@ docker run --rm anigeo/awscli      \
    
 echo "Updating service with task-definition: $(cat revision.txt)"
 docker run --rm anigeo/awscli \
-   ecs update-service --cluster $CLUSTER --service $SERVICE --region $REGION --task-definition "hello-world:$(cat revision.txt)"
+   ecs update-service --cluster $CLUSTER --service $SERVICE --region $REGION --task-definition "${FAMILY}:$(cat revision.txt)"
