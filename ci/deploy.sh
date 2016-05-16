@@ -11,8 +11,7 @@ docker run --rm anigeo/awscli 		\
    ecs register-task-definition		\
    --family $FAMILY					\
    --region $REGION 				\
-   --container-definitions "[{\"name\":\"hello-world\",\"image\":\"${IMAGE}:${TAG}\",\"cpu\":0,\"memory\":200,\"essential\":true,\"portMappings\": [{\"containerPort\": 8080,\"hostPort\": 80 }]}]" \ 
-   | grep "revision" | cut -d ':' -f 2 | cut -c2- > revision.txt
+   --container-definitions "[{\"name\":\"hello-world\",\"image\":\"${IMAGE}:${TAG}\",\"cpu\":0,\"memory\":200,\"essential\":true,\"portMappings\": [{\"containerPort\": 8080,\"hostPort\": 80 }]}]" | grep "revision" | cut -d ':' -f 2 | cut -c2- > revision.txt
       
 docker run --rm anigeo/awscli 		\
    ecs update-service 				\
