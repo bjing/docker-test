@@ -17,9 +17,8 @@
 # IMAGE_TAG=$TAG
 # MEMORY=200
 
-pwd
-ls
-# # TEMPLATE=$(cat task-definition.json.template)
+
+TEMPLATE=$(cat task-definition.json.template)
 # echo $TEMPLATE
 
 
