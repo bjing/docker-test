@@ -18,7 +18,6 @@ IMAGE_TAG=$TAG
 MEMORY=200
 
 TEMPLATE=$(cat ci/task-definition.json.template)
-echo $TEMPLATE
 
 GENERATED=${TEMPLATE//HOST_PORT/$HOST_PORT}
 GENERATED=${GENERATED//CONTAINER_PORT/$CONTAINER_PORT}
@@ -30,12 +29,18 @@ GENERATED=${GENERATED//MEMORY/$MEMORY}
 echo "$GENERATED" > /tmp/task-definition.json
 
 echo "Creating task-definition for tag: ${TAG}"
-docker run --rm anigeo/awscli      \
+
+DATA_CONTAINER_NAME="data-${TAG}"
+docker create --name $DATA_CONTAINER_NAME -v /root alpine:3.3 /bin/sh
+docker cp /tmp/task-definition.json $DATA_CONTAINER_NAME:/root/task-definition.json
+docker run --volumes-from $DATA_CONTAINER_NAME --rm anigeo/awscli \
    ecs register-task-definition    \
    --family $FAMILY                \
    --region $REGION                \
-   --cli-input-json file:///tmp/task-definition.json | grep "revision" | cut -d ':' -f 2 | cut -c2- > revision.txt
+   --cli-input-json file:///root/task-definition.json | grep "revision" | cut -d ':' -f 2 | cut -c2- > revision.txt
    
+docker rm $DATA_CONTAINER_NAME
+
 echo "Updating service with task-definition: $(cat revision.txt)"
 docker run --rm anigeo/awscli \
    ecs update-service --cluster $CLUSTER --service $SERVICE --region $REGION --task-definition "${FAMILY}:$(cat revision.txt)"
