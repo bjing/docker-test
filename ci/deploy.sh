@@ -27,15 +27,13 @@ GENERATED=${GENERATED//IMAGE_TAG/$IMAGE_TAG}
 GENERATED=${GENERATED//MEMORY/$MEMORY}
 
 echo "$GENERATED" > /tmp/task-definition.json
-chmod 777 /tmp/task-definition.json
-cat /tmp/task-definition.json
 
 echo "Creating task-definition for tag: ${TAG}"
-docker run -v /tmp/task-definition.json:/task-definition.json --rm anigeo/awscli \
+docker run -v /tmp:/data --rm anigeo/awscli \
    ecs register-task-definition    \
    --family $FAMILY                \
    --region $REGION                \
-   --cli-input-json file:///task-definition.json | grep "revision" | cut -d ':' -f 2 | cut -c2- > revision.txt
+   --cli-input-json file:///data/task-definition.json | grep "revision" | cut -d ':' -f 2 | cut -c2- > revision.txt
    
 echo "Updating service with task-definition: $(cat revision.txt)"
 docker run --rm anigeo/awscli \
