@@ -18,7 +18,8 @@
 # MEMORY=200
 
 PATH=$(pwd)
-TEMPLATE=$(cat $PATH/ci/task-definition.json.template)
+cat ci/task-definition.json.template
+TEMPLATE=$(cat task-definition.json.template)
 echo $TEMPLATE
 
 
