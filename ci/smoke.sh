@@ -11,6 +11,7 @@ echo -n "Waiting for service to stabilize..."
 docker run anigeo/awscli ecs wait services-stable --cluster $CLUSTER --services $SERVICE --region $REGION
 echo "   stable"
 
+set +e
 echo "Trying to reach ${URL} 60 times with a 10 second wait between each attempt"
 COUNTER=60
 while [ $COUNTER -gt 0 ]
