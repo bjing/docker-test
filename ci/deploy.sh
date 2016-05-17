@@ -18,7 +18,6 @@ IMAGE_TAG=$TAG
 MEMORY=200
 
 TEMPLATE=$(cat ci/task-definition.json.template)
-echo $TEMPLATE
 
 GENERATED=${TEMPLATE//HOST_PORT/$HOST_PORT}
 GENERATED=${GENERATED//CONTAINER_PORT/$CONTAINER_PORT}
@@ -28,6 +27,7 @@ GENERATED=${GENERATED//IMAGE_TAG/$IMAGE_TAG}
 GENERATED=${GENERATED//MEMORY/$MEMORY}
 
 echo "$GENERATED" > /tmp/task-definition.json
+cat /tmp/task-definition.json
 
 echo "Creating task-definition for tag: ${TAG}"
 docker run --rm anigeo/awscli      \
