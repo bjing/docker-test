@@ -19,7 +19,9 @@ MEMORY=200
 
 PATH=$(pwd)
 echo $PATH
-TEMPLATE=$(cat task-definition.json.template)
+ls
+# TEMPLATE=$(cat task-definition.json.template)
+TEMPLATE=$(pwd && ls -la)
 echo $TEMPLATE
 
 
