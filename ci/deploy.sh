@@ -17,7 +17,8 @@ IMAGE_URL=$IMAGE
 IMAGE_TAG=$TAG
 MEMORY=200
 
-TEMPLATE=$(cat ./task-definition.json.template)
+PATH=$(pwd)
+TEMPLATE=$(cat ci/task-definition.json.template)
 
 GENERATED=${TEMPLATE//HOST_PORT/$HOST_PORT}
 GENERATED=${GENERATED//CONTAINER_PORT/$CONTAINER_PORT}
