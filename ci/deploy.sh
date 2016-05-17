@@ -2,18 +2,14 @@
 
 set -e
 
-# $IMAGE and $TAG must be defined in jenkins
+source ci/vars.sh
 
-FAMILY=hello-world
-REGION=us-west-1
-CLUSTER=app
-SERVICE=app
+# $TAG must be defined in jenkins
 
 echo "Generating task-definition.json from template file"
 HOST_PORT=80
 CONTAINER_PORT=8080
 CONTAINER_NAME="hello-world"
-IMAGE_URL=$IMAGE
 IMAGE_TAG=$TAG
 MEMORY=200
 
