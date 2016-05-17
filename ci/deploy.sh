@@ -27,6 +27,7 @@ GENERATED=${GENERATED//IMAGE_TAG/$IMAGE_TAG}
 GENERATED=${GENERATED//MEMORY/$MEMORY}
 
 echo "$GENERATED" > /tmp/task-definition.json
+chmod 777 /tmp/task-definition.json
 cat /tmp/task-definition.json
 
 echo "Creating task-definition for tag: ${TAG}"
