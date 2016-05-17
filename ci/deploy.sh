@@ -30,8 +30,7 @@ echo "$GENERATED" > /tmp/task-definition.json
 cat /tmp/task-definition.json
 
 echo "Creating task-definition for tag: ${TAG}"
-docker run --rm anigeo/awscli      \
-   -v /tmp/task-definition.json:/task-definition.json \
+docker run -v /tmp/task-definition.json:/task-definition.json --rm anigeo/awscli \
    ecs register-task-definition    \
    --family $FAMILY                \
    --region $REGION                \
