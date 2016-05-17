@@ -8,7 +8,7 @@ REGION=us-west-1
 URL=http://app-ecs-elb-659670922.us-west-1.elb.amazonaws.com/
 
 echo -n "Waiting for service to stabilize..."
-docker run anigeo/awscli ecs wait services-stable --cluster $CLUSTER --services $SERVICE --region $REGION
+docker run --rm anigeo/awscli ecs wait services-stable --cluster $CLUSTER --services $SERVICE --region $REGION
 echo "   stable"
 
 set +e
