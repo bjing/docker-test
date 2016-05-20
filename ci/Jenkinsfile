@@ -2,7 +2,9 @@ node('slave-template') {
     stage 'Poll Git'
     git url: 'https://github.com/bjing/docker-test.git', branch: 'brian'
     
-    stage 'initialise environment variables'
+    stage 'Build and Push'
     sh 'sudo bash ci/build-and-push.sh'
+
+    stage 'Deploy'
     sh 'sudo bash ci/deploy.sh'
 }
