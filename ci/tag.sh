@@ -1,12 +1,17 @@
 #!/bin/bash
 
+BRANCH=$(git branch)
+echo "Current branch ${BRANCH}"
+
+TAGS=$(git tag)
+echo "All tags: ${TAGS}"
+
 PREVIOUS_TAG=$(git describe --abbrev=0 --tags)
+echo "Previous tag is ${PREVIOUS_TAG}"
 
 PREVIOUS_TAG_DATE=$(echo $PREVIOUS_TAG | cut -d. -f1,2,3)
 PREVIOUS_TAG_NUMBER=$(echo $PREVIOUS_TAG | cut -d. -f4)
 CURRENT_DATE=$(date +%Y.%m.%d)
-
-echo "Previous tag is ${PREVIOUS_TAG}"
 
 if [ $PREVIOUS_TAG_DATE = $CURRENT_DATE ]; then
   CURRENT_TAG_DATE=$PREVIOUS_TAG_DATE
