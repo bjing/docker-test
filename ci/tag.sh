@@ -25,8 +25,8 @@ TAG="${CURRENT_TAG_DATE}.${CURRENT_TAG_NUMBER}"
 
 # Create tag and push it to remote origin
 # TODO fix the following
-git config --global user.email "brian.jing@myob.com"
-git config --global user.name "Brian Jing"
+git config --global user.email "brian.jing@outlook.com"
+git config --global user.name "brian-jing"
 echo "Push generated tag to remote"
 git tag -a ${TAG} -m "Creating build tag ${TAG}"
 CREATE_TAG_SUCCESS=$?
