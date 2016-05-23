@@ -1,8 +1,8 @@
 node('slave-template') {
-    sshagent(['ac7080cf-5590-4deb-b6a7-57c4153da2a1']) {
-      stage 'Poll Git'
-      git url: 'git@github.com:bjing/docker-test.git', branch: 'brian'
+    stage 'Poll Git'
+    git url: 'git@github.com:bjing/docker-test.git', branch: 'brian', credentialsId: 'ac7080cf-5590-4deb-b6a7-57c4153da2a1'
       
+    sshagent(['ac7080cf-5590-4deb-b6a7-57c4153da2a1']) {
       stage "Tag build"
       sh "bash ci/tag.sh"
     }
