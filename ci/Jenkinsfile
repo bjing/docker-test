@@ -2,6 +2,9 @@ node('slave-template') {
     stage 'Poll Git'
     git url: 'https://github.com/bjing/docker-test.git', branch: 'brian'
     
+    stage "Tag build"
+    sh "bash ci/tag.sh"
+
     stage "Unit Test"
     sh "sudo bash ci/test.sh"
 
