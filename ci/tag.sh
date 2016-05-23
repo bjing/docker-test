@@ -23,4 +23,4 @@ else
 fi
 
 echo "TAG=${TAG}" >> $VAR_FILE
-
+echo "Build tag generated is ${TAG}"
