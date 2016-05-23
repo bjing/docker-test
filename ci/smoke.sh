@@ -4,6 +4,12 @@ set -e
 
 [[ -f ci/vars.sh ]] && source ci/vars.sh || source vars.sh
 
+echo "Checking variables"
+echo $@
+echo $CLUSTER
+echo $SERVICE
+echo $REGION
+
 echo -n "Waiting for service to stabilize..."
 docker run --rm "$@" anigeo/awscli ecs wait services-stable --cluster $CLUSTER --services $SERVICE --region $REGION
 echo "...stable"
