@@ -1,0 +1,21 @@
+node('slave-template') {
+    stage 'Poll Git'
+    git url: 'git@github.com:bjing/docker-test.git', branch: 'brian', credentialsId: 'ac7080cf-5590-4deb-b6a7-57c4153da2a1'
+      
+    sshagent(['ac7080cf-5590-4deb-b6a7-57c4153da2a1']) {
+      stage "Tag build"
+      sh "bash ci/tag.sh"
+    }
+
+    stage "Unit Test"
+    sh "sudo bash ci/test.sh"
+
+    stage 'Build and Push'
+    sh 'sudo bash ci/build-and-push.sh'
+
+    stage 'Deploy'
+    sh 'sudo bash ci/deploy.sh'
+
+    stage "Smoke Test"
+    sh "sudo bash ci/smoke.sh"
+}
