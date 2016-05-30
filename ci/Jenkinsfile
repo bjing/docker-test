@@ -1,6 +1,6 @@
 node('slave-template') {
     stage 'Poll Git'
-    git url: 'git@github.com:MYOB-Technology/platform-starter-ecs.git', branch: 'master', credentialsId: 'ac7080cf-5590-4deb-b6a7-57c4153da2a1'
+    git url: 'git@github.com:bjing/docker-test.git', branch: 'master', credentialsId: 'ac7080cf-5590-4deb-b6a7-57c4153da2a1'
       
     sshagent(['ac7080cf-5590-4deb-b6a7-57c4153da2a1']) {
       stage "Tag build"
