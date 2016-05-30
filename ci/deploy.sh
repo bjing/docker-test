@@ -1,44 +1,31 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 
-[[ -f ci/vars.sh ]] && source ci/vars.sh || source vars.sh
-
-# $TAG must be defined in jenkins
+cd $(dirname $0)
+source vars.sh
 
 echo "Generating task-definition.json from template file"
-HOST_PORT=80
-CONTAINER_PORT=8080
-CONTAINER_NAME="hello-world"
-IMAGE_TAG=$TAG
-MEMORY=200
-
-TEMPLATE=$([[ -f ci/task-definition.json.template ]] && cat ci/task-definition.json.template || cat task-definition.json.template)
-
-GENERATED=${TEMPLATE//HOST_PORT/$HOST_PORT}
-GENERATED=${GENERATED//CONTAINER_PORT/$CONTAINER_PORT}
-GENERATED=${GENERATED//CONTAINER_NAME/$CONTAINER_NAME}
-GENERATED=${GENERATED//IMAGE_URL/$IMAGE_URL}
-GENERATED=${GENERATED//IMAGE_TAG/$IMAGE_TAG}
-GENERATED=${GENERATED//MEMORY/$MEMORY}
-echo "$GENERATED" > /tmp/task-definition.json
+eval "cat > /tmp/task-definition.json <<EOF
+$(<task-definition.json.template)
+EOF
+"
 
 echo "Creating task-definition for tag: ${TAG}"
-
 DATA_CONTAINER_NAME="data-${TAG}"
 docker create --name $DATA_CONTAINER_NAME -v /root alpine:3.3 /bin/sh
 docker cp /tmp/task-definition.json $DATA_CONTAINER_NAME:/root/task-definition.json
-docker run --volumes-from $DATA_CONTAINER_NAME --rm "$@" anigeo/awscli \
+REVISION=$(docker run --volumes-from $DATA_CONTAINER_NAME --rm "$@" anigeo/awscli \
    ecs register-task-definition    \
    --family $FAMILY                \
    --region $REGION                \
-   --cli-input-json file:///root/task-definition.json | grep "revision" | cut -d ':' -f 2 | cut -c2- > revision.txt
-   
-docker rm $DATA_CONTAINER_NAME
+   --cli-input-json file:///root/task-definition.json \
+   | docker run -i --rm mwendler/jq -r .taskDefinition.revision -)
 
-echo "Updating service with task-definition: $(cat revision.txt)"
-docker run --rm "$@" anigeo/awscli \
-   ecs update-service --cluster $CLUSTER --service $SERVICE --region $REGION --task-definition "${FAMILY}:$(cat revision.txt)"
-
+docker stop $DATA_CONTAINER_NAME
+docker rm -f -v $DATA_CONTAINER_NAME
 rm /tmp/task-definition.json
-rm revision.txt
+
+echo "Updating service with task-definition: ${REVISION}"
+docker run --rm "$@" anigeo/awscli \
+   ecs update-service --cluster $CLUSTER --service $SERVICE --region $REGION --task-definition "${FAMILY}:${REVISION}"

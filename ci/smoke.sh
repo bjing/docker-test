@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 
-[[ -f ci/vars.sh ]] && source ci/vars.sh || source vars.sh
+cd $(dirname $0)
+source vars.sh
 
 echo -n "Waiting for service to stabilize..."
 docker run --rm "$@" anigeo/awscli ecs wait services-stable --cluster $CLUSTER --services $SERVICE --region $REGION

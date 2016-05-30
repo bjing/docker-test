@@ -1,15 +1,15 @@
 {
 	"containerDefinitions": [
 		{
-			"name":"CONTAINER_NAME",
-			"image":"IMAGE_URL:IMAGE_TAG",
-			"cpu":0,
-			"memory":MEMORY,
-			"essential":true,
+			"name": "${CONTAINER_NAME}",
+			"image": "${IMAGE_URL}:${IMAGE_TAG}",
+			"cpu": 0,
+			"memory": ${MEMORY},
+			"essential": true,
 			"portMappings": [
 				{
-					"containerPort": CONTAINER_PORT,
-					"hostPort": HOST_PORT 
+					"containerPort": ${CONTAINER_PORT},
+					"hostPort": ${HOST_PORT}
 				}
 			]
 		}
