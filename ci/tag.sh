@@ -57,6 +57,11 @@ else
   echo "Generated new tag: ${TAG}"
 fi
 
+
+git config --global user.email "brian.jing@outlook.com"
+git config --global user.name "brian-jing"
+
+
 # Create tag and push it to remote origin
 echo "Push generated tag to remote"
 git tag -a ${TAG} -m "Creating build tag ${TAG}"
